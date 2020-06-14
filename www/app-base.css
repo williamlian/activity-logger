@@ -1,0 +1,63 @@
+html,body {
+    box-sizing: border-box;
+    overflow: hidden;
+}
+*, *:before, *:after { box-sizing: inherit; }
+
+/* Set full height: http://stackoverflow.com/questions/6654958/make-body-have-100-of-the-browser-height */
+html {
+    /* body will set it's height based on its parent, which is html */
+    height: 100%;
+    /* set full width as well */
+    width: 100%;
+}
+body {
+
+    /* min-height is needed for pages that might scroll, ie they may contain _more_ than 100% of viewport height */
+    min-height: 100%;
+    /* needed to prevent unwanted scroll-bars */
+    margin: 0;
+    padding: 0;
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+}
+#app-container {
+    /* Set block height using the viewport height unit, and force it to be full height, even if the containing content does not require it */
+    min-height: 100vh;
+
+    /* center this block for larger viewports */
+    margin: 0 auto;
+
+    /*Use max-width for better browser handling of small windows
+    http://www.w3schools.com/css/css_max-width.asp
+    */
+    max-width: 31.25em;
+
+    /* Use min-width to prevent your design from being scrunched up in tiny viewports (and instead be replaced with horizontal scroll bars) 
+    */
+    min-width: 18.75em;
+
+    display: flex;
+    flex-direction: column;
+
+    overflow: hidden;
+}
+
+#app-header {
+    /* internal layout, centered vertically - flex layout is great for this */
+    display: flex;
+    flex-flow: row nowrap;
+    align-items:center;
+
+    /* just so we can tell the header apart */
+    background-color: #eeeeee;
+    border-bottom: 1pt #c9c9c9 solid;
+}
+
+#app-content {
+    padding: 1em;
+    margin-bottom: 50px;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+}

@@ -1,0 +1,31 @@
+#activity-header {
+    width: 100%;
+    flex-direction: row;
+    display: flex;
+    align-items: center;
+    padding: 1em;
+    
+}
+
+#activity-header-title {
+    display: flex;
+    flex-grow: 1;
+}
+
+#activity-header-form {
+    display: flex;
+    margin: 0;
+}
+
+#activity-header-form .form-control {
+    width: 5em;
+    margin-right: 2px;
+}
+
+#summary-chart {
+    height: 600px;
+}
+
+#summary {
+    margin-top: 1em;
+}

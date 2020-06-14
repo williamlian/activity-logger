@@ -1,0 +1,55 @@
+<html>
+    <head>
+        <meta name="apple-mobile-web-app-title" content="HomePad">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+        <meta name="apple-touch-fullscreen" content="yes">
+        <meta name="viewport" content="viewport-fit=cover, width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+        <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+        <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
+
+        <link rel="stylesheet" href="app-base.css">
+        <link rel="stylesheet" href="activity.css">
+
+        <script type="module" src="activity.js"></script> 
+    </head>
+    <body>
+        <div id="app-container">
+            <div id="app-header" class="navbar-light bg-light">
+                <!-- ------------ App Header Space ------------- -->
+                <div id="activity-header">
+                    <div id="activity-header-title" class="nav-brand">Activity</div>
+                    <div id="activity-header-form" class="form-inline">
+                        <input class="form-control form-control-sm" id="excludedHours" inputmode="numeric" type="text" placeholder="Hours">
+                        <button class="btn btn-sm btn-outline-success" id="excludeButton">Exclude Hours</button>
+                    </div>
+                </div>
+                <!-- --------- End App Header Space ------------ -->
+            </div>
+
+            <div id="app-content">
+                <!-- ------------ App Content Space -------------- -->
+                <div class="card">
+                    <div class="card-header">
+                        Daily Activity Summary
+                    </div>
+                    <div class="card-body">
+                        <canvas id="summary-chart"></canvas>
+
+                        <table id="summary" class="table table-sm">
+                            <thead>
+                                <th>Activity</th>
+                                <th>Total Time</th>
+                            </thead>
+                            <tbody id="summary-table"></tbody>
+                        </table>
+                    </div>
+                </div>
+                <!-- ---------- End App Content Space ------------ -->
+            </div>
+            
+        </div>
+    </body>
+</html>
