@@ -1,2 +1,2 @@
-./activity-logger
-./vendor
+activity-logger
+vendor/**
