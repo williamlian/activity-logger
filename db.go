@@ -33,13 +33,17 @@ func (c *db) StartActivity(activity Activity) error {
 		log.Println("failed to read last activity", err)
 		return errors.New("failed to start activity. detail=" + err.Error())
 	}
-	if lastActivity.StartedAt == activity.StartedAt {
-		log.Println("activity within one seconds, ignored")
+	if lastActivity.StartedAt == activity.StartedAt && lastActivity.Type.ID == activity.Type.ID {
+		log.Println("same activity within one seconds, ignored")
 		return errors.New(ErrAlreadyStarted)
 	}
 	if lastActivity.EndedAt == nil {
-		log.Println("last activity not ended yet")
-		return errors.New(ErrPreviousNotEnded)
+		log.Println("last activity not ended yet, ending it now")
+		err = c.EndActivity(lastActivity.UserID, lastActivity.Type.ID)
+		if err != nil {
+			log.Println("ending last activity failed")
+			return errors.New("failed to end activity. detail=" + err.Error())
+		}
 	}
 	_, err = c.conn.Exec(`INSERT INTO activity VALUES(?, ?, ?, ?)`,
 		activity.StartedAt,

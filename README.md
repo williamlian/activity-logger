@@ -32,7 +32,7 @@ Table ActivityType
 # Test
 
 START
-curl -i localhost:7231/start -X POST -H 'Content-Type: application/json' -d '{"userID":0, "typeID":10001}'
+curl -i localhost:7231/start -X POST -H 'Content-Type: application/json' -H 'Connection: close' -d '{"userID":0, "typeID":10001}'
 
 END
 curl -i localhost:7231/end -X POST -H 'Content-Type: application/json' -d '{"userID":0, "typeID":10001}'
@@ -42,6 +42,9 @@ curl localhost:7231/get?userID=0
 
 GET RAW
 curl 'localhost:7231/get?userID=0&type=raw'
+
+GET LAST
+curl 'localhost:7231/get?userID=0&type=last'
 
 # Test cases
 

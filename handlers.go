@@ -26,6 +26,7 @@ func (h startHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		serverError(w, err)
 		return
 	}
+	log.Printf("Received request body: %s\n", string(body))
 	var start postRequest
 	err = json.Unmarshal(body, &start)
 	if err != nil {
@@ -58,6 +59,7 @@ func (h endHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		serverError(w, err)
 		return
 	}
+	log.Printf("Received request body: %s\n", string(body))
 	var end postRequest // reuse for same field
 	err = json.Unmarshal(body, &end)
 	if err != nil {
@@ -113,9 +115,7 @@ func (h getHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	if getType == "raw" {
 		activities, err = h.db.GetActivityList(userID, from, to)
 	} else if getType == "last" {
-		lastActivity, lastErr := h.db.GetLastActivity(userID)
-		activities = lastActivity.Type.ID
-		err = lastErr
+		activities, err = h.db.GetLastActivity(userID)
 	} else {
 		activities, err = h.db.GetActivitySummary(userID, from, to)
 	}
@@ -129,7 +129,7 @@ func (h getHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 }
 
 func serverError(w http.ResponseWriter, err error) {
-	w.WriteHeader(500)
-	w.Write([]byte(err.Error()))
 	log.Println("request error", err.Error())
+	w.WriteHeader(400)
+	w.Write([]byte(err.Error()))
 }
