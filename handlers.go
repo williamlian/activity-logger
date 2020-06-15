@@ -109,6 +109,10 @@ func (h getHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 
 	if getType == "raw" {
 		activities, err = h.db.GetActivityList(userID, from, to)
+	} else if getType == "last" {
+		lastActivity, lastErr := h.db.GetLastActivity(userID)
+		activities = lastActivity.Type.ID
+		err = lastErr
 	} else {
 		activities, err = h.db.GetActivitySummary(userID, from, to)
 	}

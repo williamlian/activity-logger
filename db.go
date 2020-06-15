@@ -13,6 +13,7 @@ type DB interface {
 	EndActivity(userID int, typeID int) error
 	GetActivityList(userID int, from int64, to int64) ([]*Activity, error)
 	GetActivitySummary(userID int, from int64, to int64) ([]*Summary, error)
+	GetLastActivity(userID int) (*Activity, error)
 }
 
 type db struct {
@@ -27,7 +28,7 @@ func NewDB(conn *sql.DB) (DB, error) {
 }
 
 func (c *db) StartActivity(activity Activity) error {
-	lastActivity, err := c.getLastActivity(activity.UserID)
+	lastActivity, err := c.GetLastActivity(activity.UserID)
 	if err != nil {
 		log.Println("failed to read last activity", err)
 		return errors.New("failed to start activity. detail=" + err.Error())
@@ -53,7 +54,7 @@ func (c *db) StartActivity(activity Activity) error {
 }
 
 func (c *db) EndActivity(userID int, typeID int) error {
-	lastActivity, err := c.getLastActivity(userID)
+	lastActivity, err := c.GetLastActivity(userID)
 	if err != nil {
 		log.Println("failed to read last activity", err)
 		return errors.New("failed to end activity. detail=" + err.Error())
@@ -129,7 +130,7 @@ func (c *db) GetActivitySummary(userID int, from int64, to int64) ([]*Summary, e
 	return summary, nil
 }
 
-func (c *db) getLastActivity(userID int) (*Activity, error) {
+func (c *db) GetLastActivity(userID int) (*Activity, error) {
 	var ts sql.NullInt64
 	err := c.conn.QueryRow(
 		`SELECT MAX(started_at) FROM activity WHERE user_id = ?`, userID).Scan(&ts)
