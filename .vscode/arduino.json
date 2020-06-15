@@ -1,0 +1,6 @@
+{
+    "port": "/dev/tty.usbmodem14101",
+    "programmer": "AVRISP mkII",
+    "board": "arduino:samd:mkrwifi1010",
+    "sketch": "arduino/main/main.ino"
+}
