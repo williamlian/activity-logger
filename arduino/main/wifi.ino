@@ -2,6 +2,8 @@
 #include "logger.h"
 #include "secrets.h"
 
+const int CHECK_PERIOD = 5000;
+
 char ssid[] = ACTIVITY_SECRET_SSID;
 char pass[] = ACTIVITY_SECRET_PASS;
 
@@ -12,30 +14,28 @@ void activity::initWifi() {
   digitalWrite(activity::WIFI_LED, LOW);
 
   if (WiFi.status() == WL_NO_SHIELD) {
-    activity::log("Communication with WiFi module failed!");
+    activity::log("[wifi] Communication with WiFi module failed!");
     // don't continue
     while (true)
       ;
   }
-
   String fv = WiFi.firmwareVersion();
   if (fv < WIFI_FIRMWARE_LATEST_VERSION) {
-    activity::log("Please upgrade the firmware");
+    activity::log("[wifi] Please upgrade the firmware");
   }
   checkWifi();
-  // you're connected now, so print out the data:
-  activity::log("You're connected to the network");
+  activity::log("[wifi] You're connected to the network");
 }
 
 void activity::checkWifi() {
   // attempt to connect to Wifi network:
   while (status != WL_CONNECTED) {
     digitalWrite(activity::WIFI_LED, LOW);
-    activity::log("Attempting to connect to WPA SSID: %s", ssid);
+    activity::log("[wifi] Attempting to connect to WPA SSID: %s", ssid);
     // Connect to WPA/WPA2 network:
     status = WiFi.begin(ssid, pass);
-    // wait 10 seconds for connection:
-    delay(10000);
+    // wait x seconds for connection:
+    delay(CHECK_PERIOD);
   }
   digitalWrite(activity::WIFI_LED, HIGH);
 }

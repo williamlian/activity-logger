@@ -1,30 +1,31 @@
 #ifndef ACTIVITY_WEB_H
 #define ACTIVITY_WEB_H
 #include <WiFiSSLClient.h>
+#include <ArduinoHttpClient.h>
 #include <stdio.h>
+
 #include "secrets.h"
 
 namespace activity {
-    class WebClient {
-        public:
-            static const int USER_ID = 0;
-            static const int BUF_SIZE = 5;
-            WebClient() {
-                sprintf(host, "Host: %s", ACTIVITY_SECRET_SERVER);
-            }
-            int getLastActivityType();
-            bool startActivity(int type);
-            bool endActivity(int type);
-        protected:
-            WiFiSSLClient client;
-            int statusCode;
-            char path[256];
-            char host[256];
-            char statusCodeBuf[BUF_SIZE];
-            char bodyBuf[BUF_SIZE];
-            bool request();
-            bool readResponse();
-    };
-}
+  // https server port
+  const int SERVER_PORT = 443;
+  // buffer size for request path (e.g "/activity/get")
+  const int PATH_BUF_SIZE = 256;
+  // buffer size for request body (e.g. JSON payload)
+  const int DATA_BUF_SIZE = 1024;
+
+  class WebClient {
+  public:
+    int getLastActivityType(int userID);
+    bool startActivity(int userID, int type);
+    bool endActivity(int userID, int type);
+
+  protected:
+    WiFiSSLClient client;
+    HttpClient http = HttpClient(client, ACTIVITY_SECRET_SERVER, SERVER_PORT);
+    char path[PATH_BUF_SIZE];
+    char data[DATA_BUF_SIZE];
+  };
+}  // namespace activity
 
 #endif

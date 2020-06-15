@@ -3,6 +3,7 @@
         {
             "name": "Mac",
             "includePath": [
+                "/Users/william/Documents/Arduino/libraries/Arduino_JSON/src",
                 "/Users/william/Documents/Arduino/libraries/WiFiNINA/src",
                 "/Users/william/Library/Arduino15/packages/arduino/tools/**",
                 "/Users/william/Library/Arduino15/packages/arduino/hardware/samd/1.8.6/**"

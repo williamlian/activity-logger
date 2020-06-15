@@ -19,6 +19,9 @@ int ledState[BUTTON_COUNT];
 // store the last state of the button
 bool pressed[BUTTON_COUNT];
 
+// hard coded user ID
+int USER_ID = 0;
+
 activity::WebClient webClient;
 
 void setup() {
@@ -29,10 +32,11 @@ void setup() {
   for (int i = 0; i < BUTTON_COUNT; i++) {
     pinMode(i, INPUT_PULLUP);
     pinMode(LED_BASE_PIN + i, OUTPUT);
-    ledState[i] = LOW;
+    ledState[i] = HIGH;
+    digitalWrite(LED_BASE_PIN + i, HIGH);
     pressed[i] = false;
   }
-  activity::log("Initalized");
+  activity::log("[main] Initalized");
   activity::initWifi();
   syncState();
 }
@@ -45,7 +49,7 @@ void loop() {
       }
     } else if (pressed[i]) {
       pressed[i] = false;
-      activity::log("[%d] Pressed", i);
+      activity::log("[main] [%d] Pressed", i);
       onclick(i);
     }
   }
@@ -55,12 +59,12 @@ void loop() {
 
 // fetch last active type from server and sync the light state
 void syncState() {
-  int activeType = webClient.getLastActivityType();
+  int activeType = webClient.getLastActivityType(USER_ID);
   for(int i = 0; i < BUTTON_COUNT; i++) {
     ledState[i] = (i == activeType) ? HIGH : LOW;
     updateLed(i);
   }
-  activity::log("state sync'ed. active type = %d", activeType);
+  activity::log("[main] state sync'ed. active type = %d", activeType);
 }
 
 void onclick(int button) {
@@ -71,12 +75,10 @@ void onclick(int button) {
   updateLed(button);
 
   if(currentState == HIGH) {
-    webClient.endActivity(button);
+    webClient.endActivity(USER_ID, button);
   } else {
-    webClient.startActivity(button);
+    webClient.startActivity(USER_ID, button);
   }
-  
-
   syncState();
 }
 
