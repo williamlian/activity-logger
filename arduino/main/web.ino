@@ -26,7 +26,12 @@ int WebClient::getLastActivityType(int userID) {
     return -1;
   }
   JSONVar jsonResponse = JSON.parse(response);
-  return (int)jsonResponse["Type"]["ID"];
+  int activittType = (int)jsonResponse["Type"]["ID"];
+  if(jsonResponse["EndedAt"] == null) {
+    return activittType;
+  }
+  log("[web] last activity %d ended at: %d", activittType, (int)jsonResponse["EndedAt"]);
+  return -1;
 }
 
 bool WebClient::startActivity(int userID, int type) {
