@@ -20,6 +20,7 @@ type postRequest struct {
 }
 
 func (h startHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+	log.Println("start request")
 	body, err := ioutil.ReadAll(r.Body)
 	if err != nil {
 		serverError(w, err)
@@ -51,6 +52,7 @@ type endHandler struct {
 }
 
 func (h endHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+	log.Println("end request")
 	body, err := ioutil.ReadAll(r.Body)
 	if err != nil {
 		serverError(w, err)
@@ -77,6 +79,7 @@ type getHandler struct {
 
 func (h getHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	var from, to int64
+	log.Println("get request")
 
 	userID, err := strconv.Atoi(r.FormValue("userID"))
 	if err != nil {
@@ -128,4 +131,5 @@ func (h getHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 func serverError(w http.ResponseWriter, err error) {
 	w.WriteHeader(500)
 	w.Write([]byte(err.Error()))
+	log.Println("request error", err.Error)
 }
