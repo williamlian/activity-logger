@@ -131,5 +131,5 @@ func (h getHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 func serverError(w http.ResponseWriter, err error) {
 	w.WriteHeader(500)
 	w.Write([]byte(err.Error()))
-	log.Println("request error", err.Error)
+	log.Println("request error", err.Error())
 }
