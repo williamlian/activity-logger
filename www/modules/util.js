@@ -2,22 +2,18 @@ export function formatDuration(seconds) {
     var hours = Math.floor(seconds / 3600);
     var minutes = Math.round((seconds % 3600) / 60);
     var result = "";
-    if(hours > 1) {
-        result = hours + " hours";
-    } else if (hours == 1) {
-        result = hours + " hour";
+    if(hours > 0) {
+        result = hours + " 小时";
     }
-    if(minutes > 1) {
-        result += " " + minutes + " minutes";
-    } else if (minutes == 1) {
-        result += " " + minutes + " minute";
-    }
+    if(minutes > 0) {
+        result += " " + minutes + " 分钟";
+    } 
     return result;
 }
 
-export function hoursSinceToday() {
+export function secondsSinceToday() {
     var epoch = Math.round((new Date()).getTime() / 1000);
-    return Math.ceil((epoch - epochMidNightToday()) / 3600);
+    return epoch - epochMidNightToday();
 }
 
 export function epochMidNightToday() {

@@ -46,6 +46,9 @@ curl 'localhost:7231/get?userID=0&type=raw'
 GET LAST
 curl 'localhost:7231/get?userID=0&type=last'
 
+Restart Service
+sudo supervisorctl restart activity-logger
+
 # Test cases
 
 - start activity while previous one is not ended

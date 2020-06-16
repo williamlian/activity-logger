@@ -29,3 +29,21 @@
 #summary {
     margin-top: 1em;
 }
+
+#summary-table {
+    font-size: 0.75em;
+}
+
+#current-activity.alert {
+    font-size: 80%;
+    padding: 2px 0.75em;
+}
+
+#activity-footer {
+    width: 100%;
+    flex-direction: row;
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    padding: 1em 1em 2em 1em;
+}

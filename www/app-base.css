@@ -61,3 +61,13 @@ body {
     flex-direction: column;
     flex: 1;
 }
+
+#app-footer {
+    display: flex;
+    flex-flow: row nowrap;
+    align-items:center;
+
+    /* just so we can tell the header apart */
+    background-color: #eeeeee;
+    border-bottom: 1pt #c9c9c9 solid;
+}

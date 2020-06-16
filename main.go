@@ -21,6 +21,7 @@ func main() {
 	http.Handle(`/start`, startHandler{db: db})
 	http.Handle(`/end`, endHandler{db: db})
 	http.Handle(`/get`, getHandler{db: db})
+	http.Handle(`/types`, getTypesHandler{db: db})
 	http.HandleFunc(`/app`, func(w http.ResponseWriter, r *http.Request) { http.ServeFile(w, r, "./www/app.html") })
 	http.Handle(`/`, http.FileServer(http.Dir("./www")))
 	log.Println("Starting Server")
