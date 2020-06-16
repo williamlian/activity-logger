@@ -7,7 +7,8 @@ namespace activity {
     const int WIFI_LED = 14;
 
     void initWifi();
-    void checkWifi();
+    void connectWifi();
+    bool isConnected();
 }
 
 #endif

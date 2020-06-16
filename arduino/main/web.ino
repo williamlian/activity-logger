@@ -1,11 +1,14 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <Arduino_JSON.h>
+#include <Scheduler.h>
 
 #include "web.h"
 #include "logger.h"
 
 using namespace activity;
+
+const int WAIT_DELAY = 100;
 
 const char *startPath = "/activity/start";
 const char *endPath = "/activity/end";
@@ -19,6 +22,7 @@ int WebClient::getLastActivityType(int userID) {
     log("[web] failed to send request for last activity, error code %d", code);
     return -1;
   };
+  waitForResponse();
   int statusCode = http.responseStatusCode();
   String response = http.responseBody();
   if(statusCode != 200) {
@@ -36,12 +40,17 @@ int WebClient::getLastActivityType(int userID) {
 
 bool WebClient::startActivity(int userID, int type) {
   snprintf(data, DATA_BUF_SIZE, requestBody, userID, type);
+  log("[web] 1. start request");
   if(int code = http.post(startPath, jsonContentType, data)) {
     log("[web] failed to send request for start, error code %d", code);
     return false;
   }
+  log("[web] 2. end request");
   int statusCode = http.responseStatusCode();
+  waitForResponse();
+  log("[web] 3. get resposne code");
   String response = http.responseBody();
+  log("[web] 4. get body");
   if(statusCode != 200) {
     log("[web] bad resposne code from start: [%d] %s", statusCode, response.c_str());
     return false;
@@ -55,6 +64,7 @@ bool WebClient::endActivity(int userID, int type) {
     log("[web] failed to send request for end, error code %d", code);
     return false;
   }
+  waitForResponse();
   int statusCode = http.responseStatusCode();
   String response = http.responseBody();
   if(statusCode != 200) {
@@ -62,4 +72,10 @@ bool WebClient::endActivity(int userID, int type) {
     return false;
   }
   return true;
+}
+
+void WebClient::waitForResponse() {
+  while(!http.available()) {
+    yield();
+  }
 }

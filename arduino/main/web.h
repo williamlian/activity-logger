@@ -16,6 +16,9 @@ namespace activity {
 
   class WebClient {
   public:
+    WebClient() {
+      http.connectionKeepAlive();
+    }
     int getLastActivityType(int userID);
     bool startActivity(int userID, int type);
     bool endActivity(int userID, int type);
@@ -25,6 +28,8 @@ namespace activity {
     HttpClient http = HttpClient(client, ACTIVITY_SECRET_SERVER, SERVER_PORT);
     char path[PATH_BUF_SIZE];
     char data[DATA_BUF_SIZE];
+
+    void waitForResponse();
   };
 }  // namespace activity
 
