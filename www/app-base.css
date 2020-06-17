@@ -67,6 +67,9 @@ body {
     flex-flow: row nowrap;
     align-items:center;
 
+    /* hack for iPhone's full height screen */
+    padding-bottom: 2em;
+
     /* just so we can tell the header apart */
     background-color: #eeeeee;
     border-bottom: 1pt #c9c9c9 solid;

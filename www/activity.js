@@ -14,7 +14,7 @@ var colorMap = {
 };
 var blinkSpeed = 100;
 var pieChart = null;
-var activeType;
+var activeType = -1;
 var userID = 0;
 
 function loadSummary() {
@@ -106,14 +106,15 @@ function loadCurrent() {
             text = "当前活动: " + json.Type.DisplayName;
             bgcolor = colorMap[json.Type.ID];
             color = 'black';
+            activeType = json.Type.ID;
         } else {
             text = "当前没有任何活动";
             bgcolor = colorMap[0];
             color = 'white';
+            activeType = -1;
         }
         $('#current-activity').css({backgroundColor: bgcolor, color: color}).text(text);
-        activateFooterType(json.Type.ID, false);
-        activeType = json.Type.ID;
+        activateFooterType(activeType, false);
     }).fail(function(jqxhr, textStatus, error){
         window.alert("Failed to fetch summary: " + jqxhr.status + ". " + error);
     });
@@ -188,11 +189,11 @@ function changeType(typeID) {
         UserID: userID,
         TypeID: typeID,
     };
-    $.getJSON(path, data, function(json){
+    $.post(path, JSON.stringify(data), function(json){
         loadCurrent();
     }).fail(function(jqxhr, textStatus, error){
         window.alert("Failed to start/end: " + jqxhr.status + ". " + error);
-    });
+    }, 'json');
 }
 
 function updateExclude() {

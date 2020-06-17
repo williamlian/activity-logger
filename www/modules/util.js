@@ -5,7 +5,7 @@ export function formatDuration(seconds) {
     if(hours > 0) {
         result = hours + " 小时";
     }
-    if(minutes > 0) {
+    if(minutes >= 0) {
         result += " " + minutes + " 分钟";
     } 
     return result;
