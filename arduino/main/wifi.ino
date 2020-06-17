@@ -23,11 +23,15 @@ void activity::initWifi() {
   if (fv < WIFI_FIRMWARE_LATEST_VERSION) {
     activity::log("[wifi] Please upgrade the firmware");
   }
-  checkWifi();
+  connectWifi();
   activity::log("[wifi] You're connected to the network");
 }
 
-void activity::checkWifi() {
+bool activity::isConnected() {
+  return status == WL_CONNECTED;
+}
+
+void activity::connectWifi() {
   // attempt to connect to Wifi network:
   while (status != WL_CONNECTED) {
     digitalWrite(activity::WIFI_LED, LOW);

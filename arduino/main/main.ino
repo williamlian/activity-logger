@@ -1,3 +1,4 @@
+#include <Scheduler.h>
 #include "logger.h"
 #include "wifi.h"
 #include "web.h"
@@ -16,27 +17,33 @@ const int DEBOUNCE = 50;
 // store the ledState for each button
 int ledState[BUTTON_COUNT];
 
-// store the last state of the button
+// this use to store HIGH/LOW if ledState == BLINK
+const int BLINK = -1;
+int blinkState[BUTTON_COUNT];
+
+// store the last state of the button, purely internal for button up detection
 bool pressed[BUTTON_COUNT];
 
 // hard coded user ID
-int USER_ID = 0;
+const int USER_ID = 0;
+
+// update to adjust blink speed
+const int BLINK_SPEED = 100;
 
 activity::WebClient webClient;
 
 void setup() {
   Serial.begin(9600);
-  while (!Serial) {
-    ;  // wait for serial port to connect. Needed for native USB port only
-  }
   for (int i = 0; i < BUTTON_COUNT; i++) {
     pinMode(i, INPUT_PULLUP);
     pinMode(LED_BASE_PIN + i, OUTPUT);
-    ledState[i] = HIGH;
-    digitalWrite(LED_BASE_PIN + i, HIGH);
+
+    ledState[i] = BLINK;
+    blinkState[i] = LOW;
     pressed[i] = false;
   }
   activity::log("[main] Initalized");
+  Scheduler.startLoop(blinkLoop);
   activity::initWifi();
   syncState();
 }
@@ -53,7 +60,10 @@ void loop() {
       onclick(i);
     }
   }
-  activity::checkWifi();
+  if(!activity::isConnected()) {
+    blinkAll();
+    activity::connectWifi();
+  }
   delay(DEBOUNCE);
 }
 
@@ -69,11 +79,7 @@ void syncState() {
 
 void onclick(int button) {
   int currentState = ledState[button];
-  // Immediate button feedback. In case of web call fail, 
-  // the getLastActivity will revert the button state
-  ledState[button] = ledState[button] == HIGH ? LOW : HIGH;
-  updateLed(button);
-
+  blink(button, HIGH);
   if(currentState == HIGH) {
     webClient.endActivity(USER_ID, button);
   } else {
@@ -84,4 +90,26 @@ void onclick(int button) {
 
 void updateLed(int button) {
   digitalWrite(LED_BASE_PIN + button, ledState[button]);
+}
+
+void blinkAll() {
+  for (int i = 0; i < BUTTON_COUNT; i++) {
+    blinkState[i] = LOW;
+    ledState[i] = BLINK;
+  }
+}
+
+void blink(int button, int initalState) {
+  blinkState[button] = initalState;
+  ledState[button] = BLINK;
+}
+
+void blinkLoop() {
+  for(int i = 0; i < BUTTON_COUNT; i++) {
+    if(ledState[i] == BLINK) {
+      blinkState[i] = blinkState[i] == HIGH ? LOW : HIGH;
+      digitalWrite(LED_BASE_PIN + i, blinkState[i]);
+    }
+  }
+  delay(BLINK_SPEED);
 }
