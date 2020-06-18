@@ -25,7 +25,7 @@ function loadSummary() {
 
     $.getJSON("./get", data, function(json){
         // remaining un-documented time
-        var otherSeconds = secondsSinceToday() - excludedHours * 3600;
+        var otherSeconds = 24*3600 - excludedHours * 3600;
         json.forEach(function(row) {
             otherSeconds -= row.TotalSeconds;
         });
