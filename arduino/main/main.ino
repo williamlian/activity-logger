@@ -13,6 +13,7 @@ const int BUTTON_COUNT = 7;
 const int LED_BASE_PIN = 7;
 // debound ms
 const int DEBOUNCE = 50;
+const int SYNC_PERIOD = 5000;
 
 // store the ledState for each button
 int ledState[BUTTON_COUNT];
@@ -48,22 +49,32 @@ void setup() {
   syncState();
 }
 
+int loopCount = 1;
+int syncCount = SYNC_PERIOD / DEBOUNCE;
+
 void loop() {
   for (int i = 0; i < BUTTON_COUNT; i++) {
     if (digitalRead(i) == LOW) {
       if (!pressed[i]) {
         pressed[i] = true;
+        return;
       }
     } else if (pressed[i]) {
       pressed[i] = false;
       activity::log("[main] [%d] Pressed", i);
       onclick(i);
+      return;
     }
   }
   if(!activity::isConnected()) {
     blinkAll();
     activity::connectWifi();
+    return;
   }
+  if(loopCount == 0) {
+    syncState();
+  }
+  loopCount = (loopCount + 1) % syncCount;
   delay(DEBOUNCE);
 }
 
