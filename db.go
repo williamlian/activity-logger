@@ -14,6 +14,7 @@ type DB interface {
 	GetActivityList(userID int, from int64, to int64) ([]*Activity, error)
 	GetActivitySummary(userID int, from int64, to int64) ([]*Summary, error)
 	GetLastActivity(userID int) (*Activity, error)
+	GetAllActivityTypes() ([]*ActivityType, error)
 }
 
 type db struct {
@@ -150,10 +151,34 @@ func (c *db) GetLastActivity(userID int) (*Activity, error) {
 	row := c.conn.QueryRow(
 		`SELECT a.started_at, a.ended_at, a.user_id, a.type_id, t.name, t.display_name
 		FROM activity a, activity_type t 
-		WHERE a.user_id = ? AND a.started_at = ?`,
+		WHERE a.user_id = ? AND a.started_at = ? AND a.type_id = t.id`,
 		userID, ts,
 	)
 	return scanActivity(row)
+}
+
+func (c *db) GetAllActivityTypes() ([]*ActivityType, error) {
+	rows, err := c.conn.Query(`SELECT id, name, display_name FROM activity_type`)
+	if err != nil {
+		log.Println("failed to read all activity types: " + err.Error())
+		return nil, err
+	}
+	result := []*ActivityType{}
+	for rows.Next() {
+		var (
+			id                int
+			name, displayName string
+		)
+		if err := rows.Scan(&id, &name, &displayName); err != nil {
+			return nil, err
+		}
+		result = append(result, &ActivityType{
+			ID:          id,
+			Name:        name,
+			DisplayName: displayName,
+		})
+	}
+	return result, nil
 }
 
 type scannable interface {

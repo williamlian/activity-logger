@@ -128,6 +128,21 @@ func (h getHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	w.Write(jsonByte)
 }
 
+type getTypesHandler struct {
+	db DB
+}
+
+func (h getTypesHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+	types, err := h.db.GetAllActivityTypes()
+	if err != nil {
+		serverError(w, err)
+		return
+	}
+	jsonByte, _ := json.Marshal(types)
+	w.WriteHeader(200)
+	w.Write(jsonByte)
+}
+
 func serverError(w http.ResponseWriter, err error) {
 	log.Println("request error", err.Error())
 	w.WriteHeader(400)

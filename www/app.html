@@ -1,8 +1,9 @@
 <html>
     <head>
-        <meta name="apple-mobile-web-app-title" content="HomePad">
+        <link rel="apple-touch-icon" href="app-icon.png">
+        <meta name="apple-mobile-web-app-title" content="我的日常">
         <meta name="apple-mobile-web-app-capable" content="yes">
-        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+        <meta name="apple-mobile-web-app-status-bar-style" content="default">
         <meta name="apple-touch-fullscreen" content="yes">
         <meta name="viewport" content="viewport-fit=cover, width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
@@ -20,10 +21,10 @@
             <div id="app-header" class="navbar-light bg-light">
                 <!-- ------------ App Header Space ------------- -->
                 <div id="activity-header">
-                    <div id="activity-header-title" class="nav-brand">Activity</div>
+                    <div id="activity-header-title" class="nav-brand">我的日常</div>
                     <div id="activity-header-form" class="form-inline">
-                        <input class="form-control form-control-sm" id="excludedHours" inputmode="numeric" type="text" placeholder="Hours">
-                        <button class="btn btn-sm btn-outline-success" id="excludeButton">Exclude Hours</button>
+                        <input class="form-control form-control-sm" id="excludedHours" inputmode="numeric" type="text" placeholder="小时">
+                        <button class="btn btn-sm btn-outline-success" id="excludeButton">小时排除</button>
                     </div>
                 </div>
                 <!-- --------- End App Header Space ------------ -->
@@ -33,15 +34,17 @@
                 <!-- ------------ App Content Space -------------- -->
                 <div class="card">
                     <div class="card-header">
-                        Daily Activity Summary
+                        今日概览
                     </div>
                     <div class="card-body">
+                        <div class="alert alert-primary" id="current-activity"></div>
+
                         <canvas id="summary-chart"></canvas>
 
                         <table id="summary" class="table table-sm">
                             <thead>
-                                <th>Activity</th>
-                                <th>Total Time</th>
+                                <th>活动</th>
+                                <th>总时长</th>
                             </thead>
                             <tbody id="summary-table"></tbody>
                         </table>
@@ -50,6 +53,13 @@
                 <!-- ---------- End App Content Space ------------ -->
             </div>
             
+            <div id="app-footer" class="navbar-light bg-light">
+                <!-- ------------ App Footer Space ------------- -->
+                <div id="activity-footer">
+                </div>
+                <!-- --------- End App Footer Space ------------ -->
+            </div>
+
         </div>
     </body>
 </html>
